@@ -18,6 +18,22 @@ In the pretraining stage, we leverage a frozen pretrained Phi-2 language model a
 - Custom projection layer for aligning CLIP embeddings with Phi 2 embeddings.
 - Training on a subset of the COCO 2017 dataset, encompassing 40,000 images and captions.
 
+
+## Sample Predictions
+![image](https://github.com/Delve-ERAV1/Phi-2-Vision-Language/assets/11761529/8164799a-d6e8-4430-8c4c-891534fd3f85)
+> A street sign in a big city street.
+
+![image](https://github.com/Delve-ERAV1/Phi-2-Vision-Language/assets/11761529/d977021a-009c-4533-a940-97b4c5b0cd06)
+> A man on a skateboard holds a dog on his arm.
+
+![image](https://github.com/Delve-ERAV1/Phi-2-Vision-Language/assets/11761529/95b26d81-a5b2-4cf4-9e0e-5b4b1ae5a899)
+> Street line along city with street lights and trees lit up by street lamps. 
+
+![image](https://github.com/Delve-ERAV1/Phi-2-Vision-Language/assets/11761529/56cf9cfa-8381-4bf5-a65f-7a51a51f392e)
+> A street filled with lots of people and tall buildings.  There are lots of trucks and lights.  There are also lots of pedestrians.
+
+
+
 ### Finetuning: Instruction Following
 
 The finetuning stage is centered on enhancing the model's ability to follow instructions. This involves using the previously frozen CLIP model and the unfrozen pretrained Phi-2, along with the projection layer from the pretraining stage.
