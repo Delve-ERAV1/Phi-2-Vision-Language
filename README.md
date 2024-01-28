@@ -25,3 +25,15 @@ In the pretraining stage, the project utilized a frozen pretrained Phi-2 languag
 ## 2: Instruction Following Fine-Tunin
 
 The fine-tuning stage aimed at enhancing the model's ability to follow instructions. This involved using a frozen CLIP model, an unfrozen pretrained Phi-2, and the unfrozen projection layer from the pretraining stage. The training utilized a subset of about 40,000 images from the Instruct150K dataset. This stage explored two key methods for dataset preparation: Autoregressive Token Prediction with Teacher Forcing and the Standard Language Model Training Method. These methods were instrumental in optimizing the model's performance for specific tasks such as instruction following, striking a balance between computational efficiency and the depth of learning.
+
+
+## References
+
+The following resources and papers have significantly contributed to the conceptualization and development of this project:
+
+1. "Improved Baselines with Visual Instruction Tuning" - This paper provides insights into the fine-tuning processes for visual and language model integrations. [Read More](https://arxiv.org/abs/2310.03744)
+2. "LLaVA: Large Language and Vision Assistant" - This research explores the integration of large language models with vision capabilities, offering foundational knowledge for this project. [Read More](https://arxiv.org/abs/2304.08485)
+3. OpenAI CLIP - A cutting-edge model by OpenAI for learning visual concepts from natural language supervision. [Learn More](https://openai.com/clip/)
+4. "Mixture of Experts Explained" - This Hugging Face blog post provides an overview of the Mixture of Experts architecture, a key concept in the development of the Phi 2 model. [Read More](https://huggingface.co/blog/moe)
+5. Lightning AI - Lit-GPT - A GitHub repository offering an implementation framework for language models, used in part of this project. [Explore Repository](https://github.com/Lightning-AI/lit-gpt)
+6. Rohan Shravan ERAv1 [The School Of AI](https://www.theschoolof.ai)
