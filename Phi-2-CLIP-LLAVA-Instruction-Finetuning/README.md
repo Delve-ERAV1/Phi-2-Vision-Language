@@ -2,6 +2,9 @@
 
 This section involves advancing the capabilities of the Phi 2 language model through pretraining and finetuning stages, with a specific focus on vision-text alignment and instruction following.
 
+
+This project's approach to pretraining and finetuning, particularly in the context of visual-text alignment and instruction following, aligns with the innovative strides made by [LLaVA](https://llava-vl.github.io/). The utilization of a subset of the COCO dataset for pretraining and the Instruct150K dataset for fine-tuning in your project mirrors LLaVA's use of comprehensive image-text datasets, demonstrating a similar commitment to advancing the multimodal capabilities of AI systems.
+
 ## Overview
 
 This phase of the project is bifurcated into two major stages: pretraining for vision-text alignment, and finetuning for instruction following. Both stages are crucial for enhancing the multimodal understanding of the model.
@@ -32,7 +35,45 @@ The finetuning stage is centered on enhancing the model's ability to follow inst
 
 ## Results and Analysis
 
-[Summary of the results, performance metrics, and analysis from both pretraining and finetuning stages.]
+## wandb Logs
+
+### Pretraining
+[Standard Language Model Training Method](https://wandb.ai/sijpapi/MLM-Phi2-CLIP-Pretraining/reports/train-loss-24-01-28-15-23-25---Vmlldzo2NjYxMzgz?accessToken=i1hwm638s5rlw5emych7hz1h3wwpfjjxem4cpxxgjnoyiv0g3q19mjtbh5on0kwa)
+
+[Autoregressive Token Prediction with Teacher Forcing](https://api.wandb.ai/links/sijpapi/yv6yoy5i)
+
+
+```
+predicted_captions- 60
+target_captions  48
+Image 2:
+Target Caption: A man riding a motorcycle next to a busy street.
+Predicted Caption: A man riding a motorcycle next to a busy street......
+------------
+predicted_captions- 81
+target_captions  58
+Image 3:
+Target Caption: A dog stands next to a skateboard leaned up against a wall
+Predicted Caption: A dog stands next to a skateboard leaning up against a wall wall wall wall
+```
+
+
+### Fine-Tuning
+[Visual Instruction Following](https://wandb.ai/sijpapi/MLM-Phi2-CLIP-FINETUNING-Instruct150K/reports/loss-24-01-28-15-26-22---Vmlldzo2NjYxNDAw?accessToken=qoi4ty3r4vdclp18148rzgvf5sy0izv40ka3tq4jyikow8z344cwek74t9laah0w)
+
+Sample 
+```
+Sample 1:
+Question:  Is the television turned on or off in the image?
+Predicted Answer:  the television is turned off
+Actual Answer: The television is turned on
+------------
+Sample 2:
+Question:  Are there any people visible in the house?
+Predicted Answer:  the visible there only is to be empty.
+Actual Answer: No, the house appears to be dark and empty
+```
+
 
 ## Challenges and Resolutions
 
@@ -45,6 +86,70 @@ The finetuning stage is centered on enhancing the model's ability to follow inst
 ### Dataset and Model Size Management
 - **Challenge**: The sheer scale of datasets and model sizes posed significant challenges in terms of training time and resource allocation.
 - **Resolution**: Techniques like gradient checkpointing and distributed training were employed to manage the large dataset sizes and model complexities efficiently. This enabled more effective training without compromising on the model's performance or the richness of the dataset.
+
+
+### Projection Network with Mixture of Experts
+
+```python
+
+class PatchReducerWithProjections(nn.Module):
+    def __init__(
+        self,
+        num_patches,
+        reduced_num_patches,
+        clip_embed,
+        phi_embed,
+        num_projection_layers=4,
+        num_experts=6,
+    ):
+        super().__init__()
+
+        self.moe = MixtureOfExperts(clip_embed, num_experts)
+        self.output = nn.Linear(clip_embed, phi_embed)
+        self.projection_layers = nn.ModuleList(
+            [
+                nn.Sequential(
+                    nn.Linear(clip_embed, clip_embed),
+                    nn.GELU(),  
+                    nn.Linear(clip_embed, clip_embed),
+                )
+                for _ in range(num_projection_layers)
+            ]
+        )
+
+    def forward(self, x):
+        
+        x = x.permute(0, 2, 1) 
+        x = self.patch_reducer(x)
+        x = x.permute(0, 2, 1)
+        x = self.moe(x)
+        for layer in self.projection_layers:
+            residual = x
+            x = layer(x) + residual 
+        x = self.output(x)
+        return x
+```
+
+
+#### Teacher-Forcing
+
+```python
+def scheduled_sampling_rate(epoch, max_epochs, start_rate=1.0, end_rate=0.0, decay='exponential'):
+    if decay == 'linear':
+        return start_rate - (start_rate - end_rate) * (epoch / max_epochs)
+    elif decay == 'exponential':
+        return start_rate * (end_rate / start_rate) ** (epoch / max_epochs)
+    elif decay == 'inverse_sigmoid':
+        return end_rate + (start_rate - end_rate) * (max_epochs / (max_epochs + np.exp(epoch / max_epochs)))
+```
+
+```python
+  sampling_rate = scheduled_sampling_rate(self.global_step, self.trainer.estimated_stepping_batches)
+  if use_teacher_forcing and torch.rand(1).item() <= sampling_rate:
+      next_token = target_captions[:, t-(num_patches+1)]
+  else:
+      next_token = torch.argmax(next_step_logits, dim=-1)
+```
 
 
 ## Future Directions
@@ -60,6 +165,11 @@ The finetuning stage is centered on enhancing the model's ability to follow inst
 ### Continuous Model and Training Improvement
 - Continuous refinement of training methods, including exploring more efficient ways to implement autoregressive token prediction and standard language model training, will be a focus.
 - Investigating other optimization techniques and model architectures to further enhance the performance and capabilities of the Phi 2 model in handling complex visual-text tasks remains a key area of ongoing research and development.
+
+
+## Deployment
+
+App is deployed to huggingface spaces. [Try it out here](https://huggingface.co/spaces/Sijuade/MLM-CLIP-PHI-2-LLAVA-chatbot)
 
 
 ## References
