@@ -15,6 +15,41 @@ The Phi 2 model was developed from the ground up, featuring a custom architectur
 - Integration of a mixture of experts post-MLP.
 - Training on Project Gutenberg dataset.
 
+```
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+Using 16bit Automatic Mixed Precision (AMP)
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+IPU available: False, using: 0 IPUs
+HPU available: False, using: 0 HPUs
+wandb: Currently logged in as: sijpapi. Use `wandb login --relogin` to force relogin
+wandb: Tracking run with wandb version 0.16.1
+wandb: Run data is saved locally in ./wandb/run-20240102_172707-lqzexjqg
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run Full-try-OneCycle-LR1e5
+wandb: ⭐️ View project at https://wandb.ai/sijpapi/Phi2-Scratch-pretraining
+wandb: 🚀 View run at https://wandb.ai/sijpapi/Phi2-Scratch-pretraining/runs/lqzexjqg
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+
+  | Name               | Type             | Params
+--------------------------------------------------------
+0 | embeddings         | Embedding        | 131 M 
+1 | rotary_emb         | RotaryEmbedding  | 0     
+2 | transformer_blocks | ModuleList       | 2.3 B 
+3 | lm_head            | Linear           | 131 M 
+4 | loss_fct           | CrossEntropyLoss | 0     
+--------------------------------------------------------
+2.6 B     Trainable params
+0         Non-trainable params
+2.6 B     Total params
+10,281.165Total estimated model params size (MB)
+
+
+Epoch 12: 100%|███████████████████████████████████████| 15/15 [00:23<00:00,  0.65it/s, v_num=iljl, train/loss=6.910, val/loss_step=6.980, val/loss_epoch=7.000]
+```
+
+[wandb Training Logs](https://wandb.ai/sijpapi/Phi2-Scratch-pretraining/reports/train-loss-24-01-28-15-03-22---Vmlldzo2NjYxMjg3)
+
 ### LIT-GPT Implementation
 
 In contrast to the from-scratch approach, the Phi 2 model was also trained using the LIT-GPT framework. This method leverages an established framework for training language models, focusing on the Redpajama dataset. The LIT-GPT implementation offered a different perspective on model training, emphasizing different dataset characteristics and training dynamics.
