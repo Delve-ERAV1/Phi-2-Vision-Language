@@ -87,7 +87,7 @@ Question: What is the person doing in the image?
 Actual Answer: The person in the image is riding a skateboard down the side of a ramp,
 Predicted Answer: The person in the image is skateboarding down a ramp, performing a trick by jumping off the ramp and landing on the skateboard ramp.
 ------------
-
+```
 
 ## Challenges and Resolutions
 
