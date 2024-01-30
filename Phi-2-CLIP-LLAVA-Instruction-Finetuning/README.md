@@ -79,16 +79,14 @@ Predicted Caption: A dog stands next to a skateboard leaning up against a wall w
 
 Sample 
 ```
-Sample 1:
-Question:  Is the television turned on or off in the image?
-Predicted Answer:  the television is turned off
-Actual Answer: The television is turned on
+Question: What is the cat doing in the image?
+Actual Answer: The cat is laying down and watching a television program, with the light from the television screen casting on the cat.
+Predicted Answer: The cat is sitting on the couch, looking at the TV screen, and staring at the image of the fish.
 ------------
-Sample 2:
-Question:  Are there any people visible in the house?
-Predicted Answer:  the visible there only is to be empty.
-Actual Answer: No, the house appears to be dark and empty
-```
+Question: What is the person doing in the image?
+Actual Answer: The person in the image is riding a skateboard down the side of a ramp,
+Predicted Answer: The person in the image is skateboarding down a ramp, performing a trick by jumping off the ramp and landing on the skateboard ramp.
+------------
 
 
 ## Challenges and Resolutions
